@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(27, 27, 27);
 }
 
 code {
@@ -30,4 +31,12 @@ code {
 }
 img{
   margin-bottom:30px;
+}
+
+.gotd{
+  color:rgb(68, 68, 105);
+}
+
+h1{
+  color:white;
 }

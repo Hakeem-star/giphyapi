@@ -8,22 +8,20 @@ function Gotd(props) {
 
   if (props.result[0] !== undefined) {
     value = props.result[0].images.original.url;
-    final = (<img src={value} alt="gif of the day" />);
+    final = (
+      <div className="container gotd">
+    <h2>Gif of the day!</h2> 
+    <img src={value} alt="gif of the day" />
+    </div> );
   }
 
   return (
-    <div>
-      {final}
-    </div>
+      final
 
   )
 }
 
 class InputQuery extends React.Component {
-  constructor(props) {
-    super(props)
-
-  }
 
   render() {
     return (
@@ -37,7 +35,9 @@ class InputQuery extends React.Component {
 }
 
 class Results extends React.Component {
-
+  constructor(props) {
+    super(props)
+  }
 
   render() {
     console.log(this.props.results)
@@ -100,7 +100,7 @@ class App extends React.Component {
         <h1>GIPHY PARTY</h1>
         <InputQuery
           handleInput={(e) => this.inputValue(e)}
-          handleSearch={(e) => this.search(e)}
+          handleSearch={(e) => this.search()}
           handleRemove={(e) => this.remove(e)}
         />
         <Gotd result={this.state.gotd} />
