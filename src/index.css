@@ -13,30 +13,48 @@ code {
     monospace;
 }
 
-.container{
-  display:flex;
+.container {
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
-
-.images{
-  display:flex;
-  width:1200px;
+.image_frame {
+  display: flex;
+  /* width: 330px; */
+  justify-content: center;
+  align-items: center;
+  margin: 3vw;
+}
+button {
+  cursor: pointer;
+}
+.images {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10vw;
   flex-direction: row;
-  flex-wrap:wrap;
-  justify-content: space-around;
-  align-content: space-between;
-  margin-top: 50px;
-
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 5vw 0;
 }
-img{
-  margin-bottom:30px;
-}
-
-.gotd{
-  color:rgb(68, 68, 105);
+img {
+  border: 30px solid transparent;
 }
 
-h1{
-  color:white;
+.gotd {
+  color: rgb(97, 97, 255);
+}
+
+h1 {
+  color: white;
+}
+
+header {
+  position: sticky;
+  width: 100%;
+  background-color: rgb(27, 27, 27);
+  text-align: center;
+  padding: 1rem;
+  top: 0vw;
 }

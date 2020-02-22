@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Fragment } from "react";
 import "./App.css";
+import landscape from "./images/Brown_Frame_l.png";
 
 function Gotd(props) {
   console.log(props.result);
@@ -11,7 +12,14 @@ function Gotd(props) {
     final = (
       <div className="container gotd">
         <h2>Gif of the day!</h2>
-        <img src={value} alt="gif of the day" />
+        <img
+          style={{
+            borderImage: `url(${landscape}) 30`,
+            borderImageRepeat: "stretch"
+          }}
+          src={value}
+          alt="gif of the day"
+        />
       </div>
     );
   }
@@ -27,6 +35,9 @@ class InputQuery extends React.Component {
           onChange={this.props.handleInput}
           type="text"
           placeholder="Enter a search term"
+          onKeyPress={e => {
+            e.key === "Enter" && this.props.handleSearch(e);
+          }}
         ></input>
         <button onClick={this.props.handleSearch}>Search Giphy!</button>
         <button onClick={this.props.handleRemove}>Remove Images</button>
@@ -37,12 +48,24 @@ class InputQuery extends React.Component {
 
 class Results extends React.Component {
   render() {
-    console.log(this.props.results);
     let images = "";
+
     if (this.props.results.length > 0) {
-      images = this.props.results.map(val => (
-        <img alt="" key={val.id} src={val.images.original.url} />
-      ));
+      images = this.props.results.map((val, index) => {
+        return (
+          <div className="image_frame">
+            <img
+              alt=""
+              key={val.id + index}
+              style={{
+                borderImage: `url(${landscape}) 30`,
+                borderImageRepeat: "stretch"
+              }}
+              src={val.images.fixed_width.url}
+            />
+          </div>
+        );
+      });
     }
 
     return <div className="images">{images}</div>;
@@ -68,12 +91,13 @@ class App extends React.Component {
     let query = day || this.state.inputValue;
     const Na = <h3>Nothing was found</h3>;
     fetch(
-      "http://api.giphy.com/v1/gifs/search?q=" +
+      "https://api.giphy.com/v1/gifs/search?q=" +
         query +
         "&api_key=dc6zaTOxFJmzC"
     )
       .then(result => result.json())
       .then(res => {
+        console.log(res);
         if (res.data.length > 0) {
           let random = Math.floor(Math.random() * res.data.length);
           console.log(this, res, results, random);
@@ -105,16 +129,20 @@ class App extends React.Component {
   render() {
     console.log(this.state);
     return (
-      <div className="container">
-        <h1>GIPHY PARTY</h1>
-        <InputQuery
-          handleInput={e => this.inputValue(e)}
-          handleSearch={e => this.search()}
-          handleRemove={e => this.remove(e)}
-        />
-        <Gotd result={this.state.gotd} />
-        <Results results={this.state.ajaxResponse} />
-      </div>
+      <Fragment>
+        <header>
+          <h1>GIPHY PARTY</h1>
+          <InputQuery
+            handleInput={e => this.inputValue(e)}
+            handleSearch={e => this.search()}
+            handleRemove={e => this.remove(e)}
+          />
+        </header>
+        <main className="container">
+          <Gotd result={this.state.gotd} />
+          <Results results={this.state.ajaxResponse} />
+        </main>
+      </Fragment>
     );
   }
 }
