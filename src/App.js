@@ -71,19 +71,13 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.searchForInputValue("gif of the day");
+    this.searchForInputValue("gif of the day", "gotd");
   }
 
-  searchForInputValue(gifOfTheDayQuery) {
-    let valueToSearch = gifOfTheDayQuery
-      ? this.state.gotd
-      : this.state.ajaxResponse;
-    let searchQuery = gifOfTheDayQuery || this.state.inputValue;
-    const notFound = <h3>Nothing was found</h3>;
-
+  searchForInputValue(valueToSearch, arrayForResult) {
     fetch(
       "https://api.giphy.com/v1/gifs/search?q=" +
-        searchQuery +
+        valueToSearch +
         "&api_key=dc6zaTOxFJmzC"
     )
       .then(resultFromAPIBuffer => resultFromAPIBuffer.json())
@@ -93,18 +87,14 @@ class App extends React.Component {
             Math.random() * resultFromAPI_JSON.data.length
           );
           //select a random image from the response and push that into the array
-          valueToSearch.push(resultFromAPI_JSON.data[randomNumber]);
+          const selectedGIF = resultFromAPI_JSON.data[randomNumber];
+          const arrayWithSelectedGif = this.state[arrayForResult].push(
+            selectedGIF
+          );
+          this.setState({ arrayForResult: arrayWithSelectedGif });
         } else {
           alert("Nothing was found. Try another Search term");
           return;
-        }
-
-        if (gifOfTheDayQuery) {
-          this.setState({ gotd: valueToSearch });
-        } else if (valueToSearch.length > 0) {
-          this.setState({ ajaxResponse: valueToSearch });
-        } else {
-          this.setState({ ajaxResponse: notFound });
         }
       });
   }
@@ -124,7 +114,9 @@ class App extends React.Component {
           <h1>GIPHY PARTY</h1>
           <GIFSearchInput
             handleInput={e => this.inputValue(e)}
-            handleSearch={e => this.searchForInputValue()}
+            handleSearch={e =>
+              this.searchForInputValue(e.target.value, "ajaxResponse")
+            }
             handleRemove={e => this.removeAllGifs(e)}
           />
         </header>
