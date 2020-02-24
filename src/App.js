@@ -2,14 +2,28 @@ import React, { Fragment } from "react";
 import "./App.css";
 import landscape from "./images/Brown_Frame_l.png";
 
-function Gotd(props) {
-  console.log(props.result);
-  let final = "";
-  let value = "";
+function GIFSearchInput(props) {
+  return (
+    <div>
+      <input
+        onChange={props.handleInput}
+        type="text"
+        placeholder="Enter a search term"
+        onKeyPress={e => {
+          e.key === "Enter" && props.handleSearch(e);
+        }}
+      ></input>
+      <button onClick={props.handleSearch}>Search Giphy!</button>
+      <button onClick={props.handleRemove}>Remove Images</button>
+    </div>
+  );
+}
 
-  if (props.result[0] !== undefined) {
-    value = props.result[0].images.original.url;
-    final = (
+function GifOfTheDay(props) {
+  const resultFromApi = props.result[0];
+  if (resultFromApi !== undefined) {
+    const gifOfTheDayAPIURL = props.result[0].images.original.url;
+    return (
       <div className="container gotd">
         <h2>Gif of the day!</h2>
         <img
@@ -17,59 +31,33 @@ function Gotd(props) {
             borderImage: `url(${landscape}) 30`,
             borderImageRepeat: "stretch"
           }}
-          src={value}
+          src={gifOfTheDayAPIURL}
           alt="gif of the day"
         />
       </div>
     );
-  }
-
-  return final;
+  } else return null;
 }
 
-class InputQuery extends React.Component {
-  render() {
-    return (
-      <div>
-        <input
-          onChange={this.props.handleInput}
-          type="text"
-          placeholder="Enter a search term"
-          onKeyPress={e => {
-            e.key === "Enter" && this.props.handleSearch(e);
-          }}
-        ></input>
-        <button onClick={this.props.handleSearch}>Search Giphy!</button>
-        <button onClick={this.props.handleRemove}>Remove Images</button>
-      </div>
-    );
-  }
-}
-
-class Results extends React.Component {
-  render() {
-    let images = "";
-
-    if (this.props.results.length > 0) {
-      images = this.props.results.map((val, index) => {
-        return (
-          <div className="image_frame">
-            <img
-              alt=""
-              key={val.id + index}
-              style={{
-                borderImage: `url(${landscape}) 30`,
-                borderImageRepeat: "stretch"
-              }}
-              src={val.images.fixed_width.url}
-            />
-          </div>
-        );
-      });
-    }
-
+function Results(props) {
+  if (props.results.length > 0) {
+    const images = props.results.map((val, index) => {
+      return (
+        <div className="image_frame">
+          <img
+            alt=""
+            key={val.id + index}
+            style={{
+              borderImage: `url(${landscape}) 30`,
+              borderImageRepeat: "stretch"
+            }}
+            src={val.images.fixed_width.url}
+          />
+        </div>
+      );
+    });
     return <div className="images">{images}</div>;
-  }
+  } else return null;
 }
 
 class App extends React.Component {
@@ -83,42 +71,45 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.search("gif of the day");
+    this.searchForInputValue("gif of the day");
   }
 
-  search(day) {
-    let results = day ? this.state.gotd : this.state.ajaxResponse;
-    let query = day || this.state.inputValue;
-    const Na = <h3>Nothing was found</h3>;
+  searchForInputValue(gifOfTheDayQuery) {
+    let valueToSearch = gifOfTheDayQuery
+      ? this.state.gotd
+      : this.state.ajaxResponse;
+    let searchQuery = gifOfTheDayQuery || this.state.inputValue;
+    const notFound = <h3>Nothing was found</h3>;
+
     fetch(
       "https://api.giphy.com/v1/gifs/search?q=" +
-        query +
+        searchQuery +
         "&api_key=dc6zaTOxFJmzC"
     )
-      .then(result => result.json())
-      .then(res => {
-        console.log(res);
-        if (res.data.length > 0) {
-          let random = Math.floor(Math.random() * res.data.length);
-          console.log(this, res, results, random);
+      .then(resultFromAPIBuffer => resultFromAPIBuffer.json())
+      .then(resultFromAPI_JSON => {
+        if (resultFromAPI_JSON.data.length > 0) {
+          const randomNumber = Math.floor(
+            Math.random() * resultFromAPI_JSON.data.length
+          );
           //select a random image from the response and push that into the array
-          results.push(res.data[random]);
+          valueToSearch.push(resultFromAPI_JSON.data[randomNumber]);
         } else {
           alert("Nothing was found. Try another Search term");
           return;
         }
 
-        if (day) {
-          this.setState({ gotd: results });
-        } else if (results.length > 0) {
-          this.setState({ ajaxResponse: results });
+        if (gifOfTheDayQuery) {
+          this.setState({ gotd: valueToSearch });
+        } else if (valueToSearch.length > 0) {
+          this.setState({ ajaxResponse: valueToSearch });
         } else {
-          this.setState({ ajaxResponse: Na });
+          this.setState({ ajaxResponse: notFound });
         }
       });
   }
 
-  remove(e) {
+  removeAllGifs(e) {
     this.setState({ ajaxResponse: [] });
   }
 
@@ -127,19 +118,18 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <Fragment>
         <header>
           <h1>GIPHY PARTY</h1>
-          <InputQuery
+          <GIFSearchInput
             handleInput={e => this.inputValue(e)}
-            handleSearch={e => this.search()}
-            handleRemove={e => this.remove(e)}
+            handleSearch={e => this.searchForInputValue()}
+            handleRemove={e => this.removeAllGifs(e)}
           />
         </header>
         <main className="container">
-          <Gotd result={this.state.gotd} />
+          <GifOfTheDay result={this.state.gotd} />
           <Results results={this.state.ajaxResponse} />
         </main>
       </Fragment>
