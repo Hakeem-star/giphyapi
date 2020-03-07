@@ -2,7 +2,7 @@ import React from "react";
 
 export default function GIFSearchInput(props) {
   return (
-    <div>
+    <div className="search_inputs">
       <input
         onChange={props.handleInput}
         type="text"
@@ -11,8 +11,10 @@ export default function GIFSearchInput(props) {
           (e.key === "Enter" || e.keyCode === 13) && props.handleSearch(e);
         }}
       ></input>
-      <button onClick={props.handleSearch}>Search Giphy!</button>
-      <button onClick={props.handleRemove}>Remove Images</button>
+      <div className="buttons">
+        <button onClick={props.handleSearch}>Search</button>
+        <button onClick={props.handleRemove}>Start again</button>
+      </div>
     </div>
   );
 }

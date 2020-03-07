@@ -7,6 +7,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(27, 27, 27);
 }
+* {
+  box-sizing: border-box;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
@@ -17,6 +20,56 @@ code {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+header {
+  position: sticky;
+  width: 100%;
+  background-color: rgb(27, 27, 27);
+  text-align: center;
+  padding: 1rem;
+  top: 0vw;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+h1 {
+  font-size: 3rem;
+  margin: 0;
+  line-height: 0.7;
+  color: white;
+}
+
+.search_inputs {
+  margin: 0 2rem;
+  flex: 1 0 26rem;
+}
+input {
+  box-sizing: border-box;
+  height: 2.8rem;
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+  border: 0;
+  margin-bottom: 2px;
+  padding: 0 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-variant-caps: all-petite-caps;
+}
+.buttons {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  border: 0 solid black;
+  height: 2rem;
+  flex: 0.499;
+  font-weight: bold;
 }
 .image_frame {
   display: flex;
@@ -50,19 +103,29 @@ img {
   justify-content: center;
   align-items: center;
 }
-h1 {
-  color: white;
+@keyframes gotd {
+  0% {
+    color: hsl(1, 100%, 50%);
+  }
+  33% {
+    color: hsl(70, 100%, 50%);
+  }
+  50% {
+    color: hsl(170, 100%, 50%);
+  }
+  66% {
+    color: hsl(240, 100%, 50%);
+  }
+  100% {
+    color: hsl(300, 100%, 50%);
+  }
+}
+.gotd h2 {
+  animation: gotd 5s ease alternate infinite;
+  font-family: sans-serif;
+  font-style: italic;
 }
 
-header {
-  position: sticky;
-  width: 100%;
-  background-color: rgb(27, 27, 27);
-  text-align: center;
-  padding: 1rem;
-  top: 0vw;
-  z-index: 10000;
-}
 /* 
 //////////////////// 
 Hover Options
