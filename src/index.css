@@ -45,7 +45,11 @@ img {
 .gotd {
   color: rgb(97, 97, 255);
 }
-
+.gotd ._image_group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 h1 {
   color: white;
 }
@@ -57,4 +61,105 @@ header {
   text-align: center;
   padding: 1rem;
   top: 0vw;
+  z-index: 10000;
 }
+/* 
+//////////////////// 
+Hover Options
+/////////////////////
+*/
+
+.gotd:hover .hover_options {
+  opacity: 1;
+}
+
+.image_frame:hover .hover_options {
+  opacity: 1;
+}
+.hover_options {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s linear;
+  overflow: hidden;
+}
+.hover_options ul {
+  padding: 0;
+  text-align: center;
+}
+.hover_options li {
+  font-weight: bold;
+  color: white;
+  list-style-type: none;
+  cursor: pointer;
+  line-height: 2;
+}
+.hover_options li:hover {
+  transform: scale(1.5);
+}
+.hover_options a {
+  color: white;
+  text-decoration: none;
+}
+.hover_options a:visited {
+  color: white;
+  text-decoration: none;
+}
+
+/* ////////////////
+Hover Options coped links
+////////////////// */
+@keyframes changeCopy {
+  0% {
+    content: "Copy URL";
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+
+  80% {
+    content: "Copied";
+    opacity: 0;
+  }
+  100% {
+    content: "Copied";
+    opacity: 1;
+  }
+}
+
+.copy:after {
+  content: "Copy URL";
+}
+.copy.copied:after {
+  animation: changeCopy 0.5s;
+  animation-fill-mode: both;
+}
+/* ////////////////
+Share Dialogue Box
+////////////////// */
+
+.shareDialogue ul {
+  padding: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.shareDialogue ul li {
+  list-style-type: none;
+}
+.insta {
+  background-image: url("../src/images/Icons/insta.svg");
+}
+
+/* .facebook {
+  background-image: url("../src/images/Icons/facebook.svg");
+}
+.copy {
+  background-image: url("../src/images/Icons/copy.svg");
+} */

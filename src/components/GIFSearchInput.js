@@ -1,6 +1,6 @@
 import React from "react";
 
-export function GIFSearchInput(props) {
+export default function GIFSearchInput(props) {
   return (
     <div>
       <input
@@ -8,7 +8,7 @@ export function GIFSearchInput(props) {
         type="text"
         placeholder="Enter a search term"
         onKeyPress={e => {
-          e.key === "Enter" && props.handleSearch(e);
+          (e.key === "Enter" || e.keyCode === 13) && props.handleSearch(e);
         }}
       ></input>
       <button onClick={props.handleSearch}>Search Giphy!</button>

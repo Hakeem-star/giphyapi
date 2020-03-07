@@ -3,21 +3,34 @@ import "./App.css";
 import GIFSearchInput from "./components/GIFSearchInput";
 import GifOfTheDay from "./components/GifOfTheDay";
 import GIFResults from "./components/GIFResults";
-import searchForInputValue from "./components/searchForInputValue";
+import searchForInputValue from "./util/searchForInputValue";
+
+const hoverOptions = function() {
+  return {
+    changeImage: async () => {
+      const [key, value] = await searchForInputValue("gif of the day", "gotd");
+      this.setState({
+        [key]: value
+      });
+    },
+    removeImage: index => this.removeImage(index),
+    openShareDialogue: () => this.openShareDialogue
+  };
+};
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       inputValue: "",
-      ajaxResponse: [],
+      imagesFromSearch: [],
       gotd: []
     };
-    searchForInputValue = searchForInputValue.bind(...arguments, this);
   }
 
-  componentDidMount() {
-    searchForInputValue("gif of the day", "gotd");
+  async componentDidMount() {
+    const [key, value] = await searchForInputValue("gif of the day", "gotd");
+    this.setState({ [key]: value });
   }
 
   //searchForInputValue = (valueToSearch, arrayForResult)=> searchForInputValue(valueToSearch, arrayForResult);
@@ -29,25 +42,51 @@ class App extends React.Component {
   inputValue(e) {
     this.setState({ inputValue: e.target.value });
   }
+  removeImage(index) {
+    console.log("doing", this);
+    const newArrayOfImages = [...this.state.imagesFromSearch].filter(
+      (value, filterIndex) => index !== filterIndex
+    );
+    this.setState({
+      imagesFromSearch: newArrayOfImages
+    });
+  }
+
+  copyURL() {
+    console.log(this.state.imagesFromSearch);
+  }
 
   render() {
     return (
-      <Fragment>
+      <React.Fragment>
         <header>
           <h1>GIPHY PARTY</h1>
           <GIFSearchInput
             handleInput={e => this.inputValue(e)}
-            handleSearch={e =>
-              searchForInputValue(e.target.value, "ajaxResponse")
-            }
+            handleSearch={async e => {
+              const [key, value] = await searchForInputValue(
+                this.state.inputValue,
+                "imagesFromSearch"
+              );
+              const newState = [...this.state.imagesFromSearch, value];
+              this.setState({
+                [key]: newState
+              });
+            }}
             handleRemove={e => this.removeAllGifs(e)}
           />
         </header>
         <main className="container">
-          <GifOfTheDay result={this.state.gotd} />
-          <GIFResults results={this.state.ajaxResponse} />
+          <GifOfTheDay
+            result={this.state.gotd}
+            hoverOptions={hoverOptions.call(this)}
+          />
+          <GIFResults
+            hoverOptions={hoverOptions.call(this)}
+            results={this.state.imagesFromSearch}
+          />
         </main>
-      </Fragment>
+      </React.Fragment>
     );
   }
 }
