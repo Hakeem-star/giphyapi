@@ -7,7 +7,8 @@ export default function HoverOptions({
   removeImage,
   changeImage,
   imageURL,
-  source
+  source,
+  title
 }) {
   const [copied, setCopied] = useState("");
 
@@ -34,6 +35,7 @@ export default function HoverOptions({
         width: propsWidth || "auto",
         height: propsHeight || "auto"
       }}
+      title={title}
     >
       <ul>
         {index === "Change_image" ? (

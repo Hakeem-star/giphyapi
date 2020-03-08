@@ -124,7 +124,7 @@ describe("Adds and removes images", () => {
     expect(await gifResultImages()).toHaveLength(2);
 
     //Remove Images
-    const removeButton = getByText("Remove Images");
+    const removeButton = getByText("Start again");
     fireEvent.click(removeButton);
 
     expect(queryByAltText("giphy_image")).toBeNull();

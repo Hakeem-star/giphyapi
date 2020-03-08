@@ -36,24 +36,20 @@ class App extends React.Component {
   //searchForInputValue = (valueToSearch, arrayForResult)=> searchForInputValue(valueToSearch, arrayForResult);
 
   removeAllGifs(e) {
-    this.setState({ ajaxResponse: [] });
+    this.setState({ imagesFromSearch: [] });
   }
 
   inputValue(e) {
     this.setState({ inputValue: e.target.value });
   }
   removeImage(index) {
-    console.log("doing", this);
+    //console.log("doing", this);
     const newArrayOfImages = [...this.state.imagesFromSearch].filter(
       (value, filterIndex) => index !== filterIndex
     );
     this.setState({
       imagesFromSearch: newArrayOfImages
     });
-  }
-
-  copyURL() {
-    console.log(this.state.imagesFromSearch);
   }
 
   render() {
@@ -64,14 +60,16 @@ class App extends React.Component {
           <GIFSearchInput
             handleInput={e => this.inputValue(e)}
             handleSearch={async e => {
-              const [key, value] = await searchForInputValue(
-                this.state.inputValue,
-                "imagesFromSearch"
-              );
-              const newState = [...this.state.imagesFromSearch, value];
-              this.setState({
-                [key]: newState
-              });
+              try {
+                const [key, value] = await searchForInputValue(
+                  this.state.inputValue,
+                  "imagesFromSearch"
+                );
+                const newState = [value, ...this.state.imagesFromSearch];
+                this.setState({
+                  [key]: newState
+                });
+              } catch (err) {}
             }}
             handleRemove={e => this.removeAllGifs(e)}
           />
