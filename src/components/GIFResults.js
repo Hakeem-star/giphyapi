@@ -14,7 +14,7 @@ export default function GIFResults(props) {
       let classIndex = index ? "" : "new";
       return (
         <div
-          key={val.id + index}
+          key={val.id + (props.results.length - index)}
           className={`image_frame ${classIndex}`}
           ref={image_ref}
           style={{
