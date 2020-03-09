@@ -138,7 +138,7 @@ label:first-letter {
 .gotd {
   color: rgb(97, 97, 255);
   position: sticky;
-  top: 20%;
+  top: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
